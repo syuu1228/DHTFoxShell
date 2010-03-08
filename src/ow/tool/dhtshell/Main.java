@@ -30,6 +30,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.dhtfox.DHTFox;
+import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.slf4j.impl.LogWindow;
 
 import ow.dht.DHT;
 import ow.dht.DHTConfiguration;
@@ -95,10 +97,12 @@ public final class Main extends AbstractDHTBasedTool<String>
 	private Thread mainThread = null;
 
 	protected void usage(String command) {
-		super.usage(command, "[-p <shell port>] [--acl <ACL file>] [-n] [--web] [--showmap]"); 
+		super.usage(command, "[-p <shell port>] [--acl <ACL file>] [-n] [--upnp]");
 	}
 
 	public static void main(String[] args) {
+            LogWindow.getInstance().show();
+            SLF4JBridgeHandler.install();
 		(new Main()).start(args);
 	}
 
@@ -128,7 +132,7 @@ public final class Main extends AbstractDHTBasedTool<String>
 	private Shell<DHT<String>> init(String[] args, InputStream in, PrintStream out, boolean interactive) {
 		int shellPort = SHELL_PORT;
 		AccessController ac = null;
-		boolean disableStdin = false;
+		boolean disableStdin = false, enableUPnP = false;
 
 		this.mainThread = Thread.currentThread();
 
@@ -137,6 +141,7 @@ public final class Main extends AbstractDHTBasedTool<String>
 		opts.addOption("p", "port", true, "port number");
 		opts.addOption("A", "acl", true, "access control list file");
 		opts.addOption("n", "disablestdin", false, "disable standard input");
+                opts.addOption("u", "upnp", false, "enable UPnP");
 
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = null;
@@ -171,6 +176,9 @@ public final class Main extends AbstractDHTBasedTool<String>
 		if (cmd.hasOption('n')) {
 			disableStdin = true;
 		}
+                if (cmd.hasOption('u')) {
+                    enableUPnP = true;
+                }
 
 		// parse remaining arguments
 		// and initialize a DHT
@@ -181,7 +189,7 @@ public final class Main extends AbstractDHTBasedTool<String>
 		config.setMessagingTransport("UDP");
 		config.setRoutingAlgorithm("Kademlia");
 		config.setRoutingStyle("Iterative");
-		config.setDoUPnPNATTraversal(false);
+		config.setDoUPnPNATTraversal(enableUPnP);
 		config.setDoExpire(true);
 		config.setDoReputOnRequester(false);
 		config.setUseTimerInsteadOfThread(false);
