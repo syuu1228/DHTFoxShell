@@ -31,12 +31,10 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.dhtfox.DHTFox;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import org.slf4j.impl.LogWindow;
 
 import ow.dht.DHT;
 import ow.dht.DHTConfiguration;
 import ow.dht.DHTFactory;
-import ow.messaging.Signature;
 import ow.messaging.util.AccessController;
 import ow.tool.dhtshell.commands.ClearCommand;
 import ow.tool.dhtshell.commands.GetCommand;
@@ -101,7 +99,6 @@ public final class Main extends AbstractDHTBasedTool<String>
 	}
 
 	public static void main(String[] args) {
-            LogWindow.getInstance().show();
             SLF4JBridgeHandler.install();
 		(new Main()).start(args);
 	}
