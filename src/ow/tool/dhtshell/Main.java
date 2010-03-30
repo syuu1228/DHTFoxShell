@@ -29,7 +29,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.dhtfox.DHTServer;
+import org.dhtfox.DHTFox;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import ow.dht.DHT;
@@ -191,7 +191,7 @@ public final class Main extends AbstractDHTBasedTool<String>
 		config.setDoReputOnRequester(false);
 		config.setUseTimerInsteadOfThread(false);
 		try {
-			dht = super.initialize(DHTServer.APPLICATION_ID, DHTServer.APPLICATION_MAJOR_VERSION,
+			dht = super.initialize(DHTFox.APPLICATION_ID, DHTFox.APPLICATION_MAJOR_VERSION,
 					config,
 					COMMAND, cmd);
 		}
